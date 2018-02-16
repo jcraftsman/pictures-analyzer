@@ -25,7 +25,11 @@ Options:
   --directory PATH the local path to the directory that contains all the pictures to index
 
 ```
+exemple of usage:
 
+```bash
+analyzer index --directory "./pictures"
+```
 
 ## Installation
 
