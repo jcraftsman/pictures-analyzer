@@ -9,8 +9,10 @@ setup(
     packages=find_packages(exclude=["*_tests"]),
     license='Proprietary',
     long_description=open('README.md').read(),
-    install_requires={
-    },
+    install_requires=[
+        'pillow',
+        'pytesseract'
+    ],
     entry_points={
         'console_scripts': [
             'pictures_analyzer = pictures_analyzer.__main__:main',
