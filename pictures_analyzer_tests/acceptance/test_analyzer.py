@@ -18,7 +18,7 @@ class TestAnalyzer(TestCase):
     def setUp(self):
         self.search_engine = Mock()
         self.safe_box = Mock()
-        self.analyzer = Analyzer(self.search_engine, self.safe_box, self.finder)
+        self.analyzer = Analyzer(self.search_engine, self.safe_box, self.finder, self.optical_character_recognition)
 
     def test_index_should_use_search_engine_to_index_published_image_and_the_text_it_contains(self):
         # Given

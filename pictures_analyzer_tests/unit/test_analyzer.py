@@ -15,7 +15,8 @@ class TestAnalyzer(TestCase):
         self.search_engine = Mock()
         self.safe_box = Mock()
         self.finder = Mock()
-        self.analyzer = Analyzer(self.search_engine, self.safe_box, self.finder)
+        self.optical_character_recognition = Mock()
+        self.analyzer = Analyzer(self.search_engine, self.safe_box, self.finder, self.optical_character_recognition)
 
     def test_index_should_upload_a_file_to_safebox_when_there_is_one_file_in_directory(self):
         # Given
@@ -92,3 +93,18 @@ class TestAnalyzer(TestCase):
         self.search_engine.index.assert_called_once_with({'name': 'top_secrets.png',
                                                           'url': ANY,
                                                           'description': ANY})
+
+    def test_index_should_fill_the_description_with_ocr_picture_to_textn_in_the_payload_sent_to_search_engine(self):
+        # Given
+        picture_file = File()
+        self.finder.list_directory.return_value = [picture_file]
+        self.optical_character_recognition.image_to_text.return_value = IMAGE_TO_TEXT
+
+        # When
+        self.analyzer.index('./pictures')
+
+        # Then
+        self.search_engine.index.assert_called_once_with({'name': ANY,
+                                                          'url': ANY,
+                                                          'description': IMAGE_TO_TEXT})
+        self.optical_character_recognition.image_to_text.assert_called_once_with(picture_file)
