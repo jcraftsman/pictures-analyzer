@@ -1,7 +1,11 @@
 from unittest import TestCase
-from unittest.mock import Mock, call
+from unittest.mock import Mock, call, ANY
 
 from pictures_analyzer.analyzer import Analyzer
+
+PUBLISHED_PICTURE_URL = 'https://s3.eu-west-3.amazonaws.com/evolutionary-confidential/agent-phillip/top_secret.png'
+
+IMAGE_TO_TEXT = 'Rezidentura'
 
 
 class TestAnalyzer(TestCase):
@@ -42,3 +46,35 @@ class TestAnalyzer(TestCase):
         ])
         self.finder.list_directory.assert_called_once_with('./pictures')
 
+    def test_index_should_send_the_uploaded_url_to_the_search_engine_when_one_file_is_uploaded(self):
+        # Given
+        picture_path = './top_secrets.png'
+        self.finder.list_directory.return_value = [picture_path]
+        self.safe_box.upload.side_effect = [PUBLISHED_PICTURE_URL]
+
+        # When
+        self.analyzer.index('./pictures')
+
+        # Then
+        self.search_engine.index.assert_called_once_with({'name': ANY,
+                                                          'url': PUBLISHED_PICTURE_URL,
+                                                          'description': ANY})
+
+    def test_index_should_send_all_the_uploaded_urls_to_the_search_engine_when_three_files_are_uploaded(self):
+        # Given
+        picture_path = './top_secrets.png'
+        self.finder.list_directory.return_value = [picture_path, picture_path, picture_path]
+        uploaded_picture_1 = 'https://url1'
+        uploaded_picture_2 = 'https://url2'
+        uploaded_picture_3 = 'https://url3'
+        self.safe_box.upload.side_effect = [uploaded_picture_1, uploaded_picture_2, uploaded_picture_3]
+
+        # When
+        self.analyzer.index('./pictures')
+
+        # Then
+        self.search_engine.index.assert_has_calls([
+            call({'name': ANY, 'url': uploaded_picture_1, 'description': ANY}),
+            call({'name': ANY, 'url': uploaded_picture_2, 'description': ANY}),
+            call({'name': ANY, 'url': uploaded_picture_3, 'description': ANY})
+        ])
