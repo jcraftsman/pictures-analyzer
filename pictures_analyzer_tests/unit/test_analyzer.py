@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, call, ANY
 
+from file import File
 from pictures_analyzer.analyzer import Analyzer
 
 PUBLISHED_PICTURE_URL = 'https://s3.eu-west-3.amazonaws.com/evolutionary-confidential/agent-phillip/top_secret.png'
@@ -19,7 +20,7 @@ class TestAnalyzer(TestCase):
     def test_index_should_upload_a_file_to_safebox_when_there_is_one_file_in_directory(self):
         # Given
         picture_path = './top_secrets.png'
-        self.finder.list_directory.return_value = [picture_path]
+        self.finder.list_directory.return_value = [File(path=picture_path)]
 
         # When
         self.analyzer.index('./pictures')
@@ -30,26 +31,26 @@ class TestAnalyzer(TestCase):
 
     def test_index_should_upload_files_to_safebox_when_there_is_three_files_in_directory(self):
         # Given
-        picture_path_1 = './top_secrets_1.png'
-        picture_path_2 = './top_secrets_2.png'
-        picture_path_3 = './top_secrets_3.png'
-        self.finder.list_directory.return_value = [picture_path_1, picture_path_2, picture_path_3]
+        picture_file_1 = File(path='./top_secrets_1.png')
+        picture_file_2 = File(path='./top_secrets_2.png')
+        picture_file_3 = File(path='./top_secrets_3.png')
+        self.finder.list_directory.return_value = [picture_file_1, picture_file_2, picture_file_3]
 
         # When
         self.analyzer.index('./pictures')
 
         # Then
         self.safe_box.upload.has_calls([
-            call(picture_path_1),
-            call(picture_path_2),
-            call(picture_path_3)
+            call(picture_file_1),
+            call(picture_file_2),
+            call(picture_file_3)
         ])
         self.finder.list_directory.assert_called_once_with('./pictures')
 
     def test_index_should_send_the_uploaded_url_to_the_search_engine_when_one_file_is_uploaded(self):
         # Given
-        picture_path = './top_secrets.png'
-        self.finder.list_directory.return_value = [picture_path]
+        picture = File(path='./top_secrets.png')
+        self.finder.list_directory.return_value = [picture]
         self.safe_box.upload.side_effect = [PUBLISHED_PICTURE_URL]
 
         # When
@@ -62,8 +63,8 @@ class TestAnalyzer(TestCase):
 
     def test_index_should_send_all_the_uploaded_urls_to_the_search_engine_when_three_files_are_uploaded(self):
         # Given
-        picture_path = './top_secrets.png'
-        self.finder.list_directory.return_value = [picture_path, picture_path, picture_path]
+        picture_file = File(path='./top_secrets.png')
+        self.finder.list_directory.return_value = [picture_file, picture_file, picture_file]
         uploaded_picture_1 = 'https://url1'
         uploaded_picture_2 = 'https://url2'
         uploaded_picture_3 = 'https://url3'
@@ -78,3 +79,16 @@ class TestAnalyzer(TestCase):
             call({'name': ANY, 'url': uploaded_picture_2, 'description': ANY}),
             call({'name': ANY, 'url': uploaded_picture_3, 'description': ANY})
         ])
+
+    def test_index_should_fill_the_picture_name_in_the_payload_sent_to_search_engine_indexer(self):
+        # Given
+        picture_file = File(path='./top_secrets.png', name='top_secrets.png')
+        self.finder.list_directory.return_value = [picture_file]
+
+        # When
+        self.analyzer.index('./pictures')
+
+        # Then
+        self.search_engine.index.assert_called_once_with({'name': 'top_secrets.png',
+                                                          'url': ANY,
+                                                          'description': ANY})
