@@ -1,12 +1,12 @@
 from unittest import TestCase
 from unittest.mock import Mock, call, ANY
 
-from file import File
+from pictures_analyzer.file import File
 from pictures_analyzer.analyzer import Analyzer
 
 PUBLISHED_PICTURE_URL = 'https://s3.eu-west-3.amazonaws.com/evolutionary-confidential/agent-phillip/top_secret.png'
 
-IMAGE_TO_TEXT = 'Rezidentura'
+TEXT_IN_PICTURE = 'Rezidentura'
 
 
 class TestAnalyzer(TestCase):
@@ -50,7 +50,7 @@ class TestAnalyzer(TestCase):
 
     def test_index_should_send_the_uploaded_url_to_the_search_engine_when_one_file_is_uploaded(self):
         # Given
-        picture = File(path='./top_secrets.png')
+        picture = File()
         self.finder.list_directory.return_value = [picture]
         self.safe_box.upload.side_effect = [PUBLISHED_PICTURE_URL]
 
@@ -64,21 +64,21 @@ class TestAnalyzer(TestCase):
 
     def test_index_should_send_all_the_uploaded_urls_to_the_search_engine_when_three_files_are_uploaded(self):
         # Given
-        picture_file = File(path='./top_secrets.png')
+        picture_file = File()
         self.finder.list_directory.return_value = [picture_file, picture_file, picture_file]
-        uploaded_picture_1 = 'https://url1'
-        uploaded_picture_2 = 'https://url2'
-        uploaded_picture_3 = 'https://url3'
-        self.safe_box.upload.side_effect = [uploaded_picture_1, uploaded_picture_2, uploaded_picture_3]
+        uploaded_picture_url_1 = 'https://url1'
+        uploaded_picture_url_2 = 'https://url2'
+        uploaded_picture_url_3 = 'https://url3'
+        self.safe_box.upload.side_effect = [uploaded_picture_url_1, uploaded_picture_url_2, uploaded_picture_url_3]
 
         # When
         self.analyzer.index('./pictures')
 
         # Then
         self.search_engine.index.assert_has_calls([
-            call({'name': ANY, 'url': uploaded_picture_1, 'description': ANY}),
-            call({'name': ANY, 'url': uploaded_picture_2, 'description': ANY}),
-            call({'name': ANY, 'url': uploaded_picture_3, 'description': ANY})
+            call({'name': ANY, 'url': uploaded_picture_url_1, 'description': ANY}),
+            call({'name': ANY, 'url': uploaded_picture_url_2, 'description': ANY}),
+            call({'name': ANY, 'url': uploaded_picture_url_3, 'description': ANY})
         ])
 
     def test_index_should_fill_the_picture_name_in_the_payload_sent_to_search_engine_indexer(self):
@@ -98,7 +98,7 @@ class TestAnalyzer(TestCase):
         # Given
         picture_file = File()
         self.finder.list_directory.return_value = [picture_file]
-        self.optical_character_recognition.image_to_text.return_value = IMAGE_TO_TEXT
+        self.optical_character_recognition.image_to_text.return_value = TEXT_IN_PICTURE
 
         # When
         self.analyzer.index('./pictures')
@@ -106,5 +106,5 @@ class TestAnalyzer(TestCase):
         # Then
         self.search_engine.index.assert_called_once_with({'name': ANY,
                                                           'url': ANY,
-                                                          'description': IMAGE_TO_TEXT})
+                                                          'description': TEXT_IN_PICTURE})
         self.optical_character_recognition.image_to_text.assert_called_once_with(picture_file)
