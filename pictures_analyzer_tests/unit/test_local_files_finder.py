@@ -19,10 +19,10 @@ class TestLocalFilesFinder(TestCase):
             # Then
             os_patch.assert_called_once_with(directory_path)
 
-        self.assertEquals(len(files_in_directory), 1)
+        self.assertEqual(len(files_in_directory), 1)
         file = files_in_directory[0]
-        self.assertEquals(file.name, 'toto')
-        self.assertEquals(file.path, './directory/toto')
+        self.assertEqual(file.name, 'toto')
+        self.assertEqual(file.path, './directory/toto')
 
     def test_list_directory_should_return_two_files_objects_when_there_are_two_files_in_dir(self):
         # Given
@@ -34,10 +34,10 @@ class TestLocalFilesFinder(TestCase):
             # Then
             os_patch.assert_called_once_with(directory_path)
 
-        self.assertEquals(len(files_in_directory), 2)
+        self.assertEqual(len(files_in_directory), 2)
         file_1 = files_in_directory[0]
-        self.assertEquals(file_1.name, 'file1')
-        self.assertEquals(file_1.path, './my_directory/file1')
+        self.assertEqual(file_1.name, 'file1')
+        self.assertEqual(file_1.path, './my_directory/file1')
         file_2 = files_in_directory[1]
-        self.assertEquals(file_2.name, 'file2')
-        self.assertEquals(file_2.path, './my_directory/file2')
+        self.assertEqual(file_2.name, 'file2')
+        self.assertEqual(file_2.path, './my_directory/file2')
