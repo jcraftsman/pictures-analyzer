@@ -3,6 +3,8 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from pictures_analyzer.analyzer import Analyzer
+from pictures_analyzer.local_files_finder import LocalFilesFinder
+from pictures_analyzer.tesseract_ocr import TesseractOCR
 
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -18,6 +20,8 @@ class TestAnalyzer(TestCase):
     def setUp(self):
         self.search_engine = Mock()
         self.safe_box = Mock()
+        self.finder = LocalFilesFinder()
+        self.optical_character_recognition = TesseractOCR()
         self.analyzer = Analyzer(self.search_engine, self.safe_box, self.finder, self.optical_character_recognition)
 
     def test_index_should_use_search_engine_to_index_published_image_and_the_text_it_contains(self):
