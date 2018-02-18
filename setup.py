@@ -11,7 +11,8 @@ setup(
     long_description=open('README.md').read(),
     install_requires=[
         'pillow',
-        'pytesseract'
+        'pytesseract',
+        'requests'
     ],
     entry_points={
         'console_scripts': [
