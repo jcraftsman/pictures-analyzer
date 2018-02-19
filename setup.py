@@ -12,7 +12,8 @@ setup(
     install_requires=[
         'pillow',
         'pytesseract',
-        'requests'
+        'requests',
+        'boto3'
     ],
     entry_points={
         'console_scripts': [
