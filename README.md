@@ -10,7 +10,7 @@ Pictures analyzer is a tool that analyses the content of the pictures and notifi
 Usage: analyzer [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  --debug  show every shell call done by pictures_analyzer
+  --debug  Show debug level instructions within analyzer command group
   --help   Show this message and exit.
 
 Commands:
@@ -22,7 +22,9 @@ Commands:
 Usage: analyzer index [OPTIONS]
 
 Options:
-  --directory PATH the local path to the directory that contains all the pictures to index
+  --directory DIRECTORY  The local path to the directory that contains all the
+                         pictures to index
+  --help                 Show this message and exit.
 
 ```
 exemple of usage:
