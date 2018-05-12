@@ -1,4 +1,5 @@
 from pictures_analyzer.finder import Finder
+from pictures_analyzer.invalid_file_exception import InvalidFileException
 from pictures_analyzer.ocr import OCR
 from pictures_analyzer.safe_box import SafeBox
 from pictures_analyzer.search_engine import SearchEngine
@@ -15,8 +16,14 @@ class Analyzer(object):
     def index(self, pictures_directory_path):
         files = self.finder.list_directory(pictures_directory_path)
         for file in files:
-            url = self.safe_box.upload(file.path)
-            ocr_image_to_text = self.ocr.image_to_text(file)
-            self.search_engine.index({'name': file.name,
-                                      'url': url,
-                                      'description': ocr_image_to_text})
+            try:
+                self._index_one_file(file)
+            except InvalidFileException:
+                pass
+
+    def _index_one_file(self, file):
+        ocr_image_to_text = self.ocr.image_to_text(file)
+        url = self.safe_box.upload(file.path)
+        self.search_engine.index({'name': file.name,
+                                  'url': url,
+                                  'description': ocr_image_to_text})

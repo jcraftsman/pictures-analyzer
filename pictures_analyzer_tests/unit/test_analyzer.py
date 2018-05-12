@@ -1,8 +1,9 @@
 from unittest import TestCase
 from unittest.mock import Mock, call, ANY
 
-from pictures_analyzer.file import File
 from pictures_analyzer.analyzer import Analyzer
+from pictures_analyzer.file import File
+from pictures_analyzer.invalid_file_exception import InvalidFileException
 
 PUBLISHED_PICTURE_URL = 'https://s3.eu-west-3.amazonaws.com/evolutionary-confidential/agent-phillip/top_secret.png'
 
@@ -107,4 +108,18 @@ class TestAnalyzer(TestCase):
         self.search_engine.index.assert_called_once_with({'name': ANY,
                                                           'url': ANY,
                                                           'description': TEXT_IN_PICTURE})
+        self.optical_character_recognition.image_to_text.assert_called_once_with(picture_file)
+
+    def test_index_should_not_upload_when_ocr_raise_invalid_file_exception(self):
+        # Given
+        picture_file = File()
+        self.finder.list_directory.return_value = [picture_file]
+        self.optical_character_recognition.image_to_text.side_effect = InvalidFileException()
+
+        # When
+        self.analyzer.index('./pictures')
+
+        # Then
+        self.safe_box.upload.assert_not_called()
+        self.search_engine.index.assert_not_called()
         self.optical_character_recognition.image_to_text.assert_called_once_with(picture_file)
