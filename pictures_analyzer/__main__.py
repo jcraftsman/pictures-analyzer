@@ -15,16 +15,14 @@ from pictures_analyzer.tesseract_ocr import TesseractOCR
               is_flag=True)
 def main(debug):
     log_level = logging.DEBUG if debug else logging.INFO
-    setup_logging()
-    logger = get_dhc_logger()
-    logger.setLevel(log_level)
+    setup_logging(log_level)
 
 
 @click.command("index")
 @click.option("--directory", type=click.Path(exists=True, file_okay=False, resolve_path=True),
               help='The local path to the directory that contains all the pictures to index')
 def index(directory):
-    print('indexing all files in: ', directory)
+    get_logger().info('indexing all files in: ', directory)
     search_engine = HttpSearchEngine(os.environ)
     safe_box = S3SafeBox(os.environ)
     finder = LocalFilesFinder()
@@ -34,16 +32,17 @@ def index(directory):
     analyzer.index(directory)
 
 
-def setup_logging():
+def setup_logging(log_level):
     logging.basicConfig(
         format="%(asctime)s %(levelname)s - %(message)s [%(filename)s:%(lineno)s] [%(relativeCreated)d]",
-        level=logging.WARNING)
+        level=log_level)
 
 
-def get_dhc_logger():
+def get_logger() -> logging.Logger:
     return logging.getLogger('pictures_analyzer')
 
 
 main.add_command(index)
+
 if __name__ == '__main__':
     main()
