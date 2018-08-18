@@ -3,11 +3,11 @@ import os
 
 import click
 
-from pictures_analyzer.analyzer import Analyzer
-from pictures_analyzer.http_search_engine import HttpSearchEngine
-from pictures_analyzer.local_files_finder import LocalFilesFinder
-from pictures_analyzer.s3_safe_box import S3SafeBox
-from pictures_analyzer.tesseract_ocr import TesseractOCR
+from pictures_analyzer.domain.analyzer import Analyzer
+from pictures_analyzer.infra.http_search_engine import HttpSearchEngine
+from pictures_analyzer.infra.local_files_finder import LocalFilesFinder
+from pictures_analyzer.infra.s3_safe_box import S3SafeBox
+from pictures_analyzer.infra.tesseract_ocr import TesseractOCR
 
 
 @click.group("analyzer")

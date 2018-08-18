@@ -3,9 +3,9 @@ from os import path
 from unittest import TestCase
 from unittest.mock import Mock
 
-from pictures_analyzer.analyzer import Analyzer
-from pictures_analyzer.local_files_finder import LocalFilesFinder
-from pictures_analyzer.tesseract_ocr import TesseractOCR
+from pictures_analyzer.domain.analyzer import Analyzer
+from pictures_analyzer.infra.local_files_finder import LocalFilesFinder
+from pictures_analyzer.infra.tesseract_ocr import TesseractOCR
 
 PICTURE_FILE_NAME = 'top_secret.png'
 

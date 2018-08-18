@@ -1,4 +1,4 @@
-from pictures_analyzer.file import File
+from pictures_analyzer.domain.file import File
 
 
 class OCR(object):

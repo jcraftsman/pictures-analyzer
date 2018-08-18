@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch, Mock, ANY
 
-from pictures_analyzer.s3_safe_box import S3SafeBox
+from pictures_analyzer.infra.s3_safe_box import S3SafeBox
 
 PICTURE_PATH = './picture.jpg'
 

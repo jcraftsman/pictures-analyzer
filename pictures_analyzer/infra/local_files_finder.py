@@ -2,8 +2,8 @@ import os
 from os import path
 from typing import List
 
-from pictures_analyzer.file import File
-from pictures_analyzer.finder import Finder
+from pictures_analyzer.domain.file import File
+from pictures_analyzer.domain.finder import Finder
 
 
 class LocalFilesFinder(Finder):

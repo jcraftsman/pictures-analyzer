@@ -1,6 +1,6 @@
 import requests
 
-from pictures_analyzer.search_engine import SearchEngine
+from pictures_analyzer.domain.search_engine import SearchEngine
 
 
 class HttpSearchEngine(SearchEngine):

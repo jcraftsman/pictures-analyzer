@@ -2,7 +2,7 @@ import uuid
 
 import boto3
 
-from pictures_analyzer.safe_box import SafeBox
+from pictures_analyzer.domain.safe_box import SafeBox
 
 
 class S3SafeBox(SafeBox):

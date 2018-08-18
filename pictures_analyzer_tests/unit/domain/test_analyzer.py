@@ -1,8 +1,8 @@
 from unittest import TestCase
 from unittest.mock import Mock, call, ANY
 
-from pictures_analyzer.file import File
-from pictures_analyzer.analyzer import Analyzer
+from pictures_analyzer.domain.file import File
+from pictures_analyzer.domain.analyzer import Analyzer
 
 PUBLISHED_PICTURE_URL = 'https://s3.eu-west-3.amazonaws.com/evolutionary-confidential/agent-phillip/top_secret.png'
 

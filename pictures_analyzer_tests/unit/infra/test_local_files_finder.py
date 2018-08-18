@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from pictures_analyzer.local_files_finder import LocalFilesFinder
+from pictures_analyzer.infra.local_files_finder import LocalFilesFinder
 
 
 class TestLocalFilesFinder(TestCase):

@@ -1,8 +1,8 @@
 from PIL import Image
 from pytesseract import image_to_string
 
-from pictures_analyzer.file import File
-from pictures_analyzer.ocr import OCR
+from pictures_analyzer.domain.file import File
+from pictures_analyzer.domain.ocr import OCR
 
 
 class TesseractOCR(OCR):

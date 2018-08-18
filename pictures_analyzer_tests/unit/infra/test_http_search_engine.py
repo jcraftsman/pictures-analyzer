@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 import requests_mock
 
-from pictures_analyzer.http_search_engine import HttpSearchEngine
+from pictures_analyzer.infra.http_search_engine import HttpSearchEngine
 
 SEARCH_ENGINE_URL = 'https://search-engine.secure.api.wal'
 

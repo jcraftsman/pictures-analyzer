@@ -1,7 +1,7 @@
-from pictures_analyzer.finder import Finder
-from pictures_analyzer.ocr import OCR
-from pictures_analyzer.safe_box import SafeBox
-from pictures_analyzer.search_engine import SearchEngine
+from pictures_analyzer.domain.finder import Finder
+from pictures_analyzer.domain.ocr import OCR
+from pictures_analyzer.domain.safe_box import SafeBox
+from pictures_analyzer.domain.search_engine import SearchEngine
 
 
 class Analyzer(object):
