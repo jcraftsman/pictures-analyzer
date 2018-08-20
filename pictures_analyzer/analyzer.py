@@ -8,5 +8,5 @@ class Analyzer(object):
         self.safe_box = safe_box
         self.search_engine = search_engine
 
-    def index(self, pictures_directory_path):
+    def index(self, pictures_directory_path) -> None:
         pass
