@@ -12,7 +12,7 @@ class Analyzer(object):
         self.safe_box = safe_box
         self.search_engine = search_engine
 
-    def index(self, pictures_directory_path):
+    def index(self, pictures_directory_path) -> None:
         files = self.finder.list_directory(pictures_directory_path)
         for file in files:
             url = self.safe_box.upload(file.path)
