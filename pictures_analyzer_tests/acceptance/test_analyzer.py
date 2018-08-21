@@ -1,12 +1,17 @@
 import os
+from os import path
 from unittest import TestCase
 from unittest.mock import Mock
 
 from pictures_analyzer.analyzer import Analyzer
 
-CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
+PICTURE_FILE_NAME = 'top_secret.png'
 
-PICTURES_DIRECTORY_PATH = CURRENT_PATH + '/pictures'
+CURRENT_PATH = os.path.dirname(path.realpath(__file__))
+
+PICTURES_DIRECTORY_PATH = path.join(CURRENT_PATH, 'pictures')
+
+PATH_TO_PICTURE_FILE = path.join(PICTURES_DIRECTORY_PATH, 'top_secret.png')
 
 PUBLISHED_PICTURE_URL = 'https://s3.eu-west-3.amazonaws.com/evolutionary-confidential/agent-phillip/top_secret.png'
 
@@ -28,7 +33,7 @@ class TestAnalyzer(TestCase):
         self.analyzer.index(PICTURES_DIRECTORY_PATH)
 
         # Then
-        self.search_engine.index.assert_called_once_with({'name': 'top_secret.png',
+        self.search_engine.index.assert_called_once_with({'name': PICTURE_FILE_NAME,
                                                           'url': PUBLISHED_PICTURE_URL,
                                                           'description': IMAGE_TO_TEXT})
-        self.safe_box.upload.assert_called_once_with(PICTURES_DIRECTORY_PATH + '/top_secret.png')
+        self.safe_box.upload.assert_called_once_with(PATH_TO_PICTURE_FILE)
