@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+before_install:
+  - pip install virtualenv
+  - sudo ln -s `which python3` /usr/local/bin/python3
+install:
+  - make venv
+  - make install_requirements_dev
+script: make tests
